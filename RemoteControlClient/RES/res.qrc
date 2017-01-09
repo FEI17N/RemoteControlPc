@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>TRAY.png</file>
+        <file>TRAY_S.png</file>
+        <file>TRAY_C.png</file>
+        <file>power_off.png</file>
+        <file>power_off_press.png</file>
+    </qresource>
+</RCC>

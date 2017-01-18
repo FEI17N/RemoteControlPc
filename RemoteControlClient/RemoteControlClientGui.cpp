@@ -19,6 +19,8 @@ RemoteControlClientGui::RemoteControlClientGui(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_parse = new protocol_parse;
+
     m_scanSocket = new QUdpSocket(this);
     m_clientSocket = new QTcpSocket(this);
 
@@ -45,6 +47,7 @@ RemoteControlClientGui::RemoteControlClientGui(QWidget *parent) :
 RemoteControlClientGui::~RemoteControlClientGui()
 {
     delete ui;
+    delete m_parse;
 }
 
 void RemoteControlClientGui::resizeEvent(QResizeEvent* e)
@@ -183,7 +186,7 @@ void RemoteControlClientGui::on_toolButton_clicked()
    {
        char command[] = {"POWER OFF"};
        int out_length = 0;
-       char* msg = protocol_parse_to_message(sizeof(command), command, &out_length);
+       char* msg = m_parse->protocol_parse_to_message(sizeof(command), command, &out_length);
        QByteArray sendMsg(msg, out_length);
        m_clientSocket->write(sendMsg);
    }

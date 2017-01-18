@@ -12,9 +12,9 @@
 
 #include <QDebug>
 
-extern "C" {
+
 #include "protocol_parse.h"
-}
+
 
 const quint16 listenPort = 7430;
 

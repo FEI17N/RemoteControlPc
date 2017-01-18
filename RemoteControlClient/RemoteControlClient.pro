@@ -13,11 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        RemoteControlClientGui.cpp \
-    protocol_parse.cpp
+        RemoteControlClientGui.cpp
 
-HEADERS  += RemoteControlClientGui.h \
-    protocol_parse.h
+HEADERS  += RemoteControlClientGui.h
 
 FORMS    += RemoteControlClientGui.ui
 
@@ -31,4 +29,6 @@ RESOURCES += \
 
 DISTFILES += \
     android-sources/AndroidManifest.xml
+
+include(../protocol_parse/protocol_parse.pri);
 

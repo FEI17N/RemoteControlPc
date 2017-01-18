@@ -12,6 +12,8 @@ class RemoteControlClientGui;
 #include <QUdpSocket>
 #include <QTimer>
 
+class protocol_parse;
+
 class RemoteControlClientGui : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +36,7 @@ private:
     QStringList m_ip;
 
     QTimer m_connectTimer;
+    protocol_parse *m_parse;
 
 private slots:
     void readPendingDatagrams();

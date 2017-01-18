@@ -10,6 +10,8 @@ class QTcpSocket;
 class QUdpSocket;
 class QAbstractSocket;
 
+class protocol_parse;
+
 class Network : public QObject
 {
     Q_OBJECT
@@ -33,6 +35,7 @@ private:
     QTcpSocket* m_client;
     QTimer m_brocastTimer;
     QTimer m_heartTimer;
+    protocol_parse *m_parse;
 
     void writeMessage(QAbstractSocket* socket, char* msg, int length);
 

@@ -16,7 +16,7 @@ extern "C" {
 #include "protocol_parse.h"
 }
 
-const quint16 listenPort = 7431;
+const quint16 listenPort = 7430;
 
 Network::Network(QObject* parent)
     : QObject(parent)
@@ -29,7 +29,9 @@ Network::Network(QObject* parent)
 
     setProperty("TCO_CONNECT", false);
 
-    protocol_parse_set_callback(newMessageCome);
+    m_parse = new protocol_parse;
+
+    m_parse->protocol_parse_set_callback(newMessageCome);
 
     connect(&m_brocastTimer, SIGNAL(timeout()), this, SLOT(brocastInfo()));
     connect(&m_heartTimer, SIGNAL(timeout()), this, SLOT(heartInfo()));
@@ -42,7 +44,10 @@ Network::Network(QObject* parent)
 
 Network::~Network()
 {
-    //
+
+     m_parse->protocol_parse_set_callback(NULL);
+     m_tcpServer->close();
+    delete m_parse;
 }
 
 void Network::stop_start()
@@ -117,14 +122,14 @@ void Network::ReadDataFromSocket()
     QByteArray rawreply= static_cast<QTcpSocket*>(sender())->readAll();
     for (int i = 0; i < rawreply.size(); ++i)
     {
-        protocol_parse_in(rawreply[i]);
+        m_parse->protocol_parse_in(rawreply[i]);
     }
 }
 
 void Network::writeMessage(QAbstractSocket* socket, char* inmsg, int length)
 {
     int out_length = 0;
-    char* msg = protocol_parse_to_message(length, inmsg, &out_length);
+    char* msg = m_parse->protocol_parse_to_message(length, inmsg, &out_length);
     socket->write(QByteArray(msg, out_length));
 }
 

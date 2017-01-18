@@ -96,7 +96,7 @@ void Network::newMessageCome(char* msg, int len)
 
     if (inMsg.toLower() == "power off")
     {
-        powerOff();;
+        powerOff();
     }
 }
 

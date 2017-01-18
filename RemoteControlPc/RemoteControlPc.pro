@@ -15,7 +15,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
         ControlPannel.cpp \
     Network/Network.cpp \
-    Network/protocol_parse.c
+    Network/protocol_parse.cpp
 
 HEADERS  += ControlPannel.h \
     Network/Network.h \

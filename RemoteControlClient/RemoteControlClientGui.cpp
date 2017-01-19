@@ -10,8 +10,9 @@
 #include <QJsonValue>
 
 #include "protocol_parse.h"
+#include "PUBLIC_DATA.h"
 
-const quint16 listenPort = 7431;
+const quint16 listenPort = 7430;
 
 RemoteControlClientGui::RemoteControlClientGui(QWidget *parent) :
     QMainWindow(parent),
@@ -184,9 +185,14 @@ void RemoteControlClientGui::on_toolButton_clicked()
 {
    if (m_clientSocket->isOpen())
    {
-       char command[] = {"POWER OFF"};
+       QString command("POWER OFF");
+       quint8 size_c = sizeof("POWER OFF");
+       quint8 size_d = 0;
+       command.prepend(size_d);
+       command.prepend(size_c);
+       char* c_command = (char*)command.toStdString().c_str();
        int out_length = 0;
-       char* msg = m_parse->protocol_parse_to_message(sizeof(command), command, &out_length);
+       char* msg = m_parse->protocol_parse_to_message(command.toStdString().length(), c_command, &out_length);
        QByteArray sendMsg(msg, out_length);
        m_clientSocket->write(sendMsg);
    }

@@ -11,13 +11,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = RemoteControlPc
 TEMPLATE = app
 
+INCLUDEPATH += ../public_define
+
 
 SOURCES += main.cpp\
         ControlPannel.cpp \
-    Network/Network.cpp
+    Network/Network.cpp \
+    Network/CommandObject.cpp
 
 HEADERS  += ControlPannel.h \
-    Network/Network.h
+    Network/Network.h \
+    Network/CommandObject.h \
+    ../public_define/PUBLIC_DATA.h
 
 FORMS    +=
 

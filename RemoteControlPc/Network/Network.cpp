@@ -14,9 +14,11 @@
 
 
 #include "protocol_parse.h"
+#include "CommandObject.h"
 
 
 const quint16 listenPort = 7430;
+CommandObject* m_command;
 
 Network::Network(QObject* parent)
     : QObject(parent)
@@ -24,6 +26,8 @@ Network::Network(QObject* parent)
     m_tcpServer = new QTcpServer(this);
     m_tcpServer->setMaxPendingConnections(1);
     m_udpSocket = new QUdpSocket(this);
+
+    m_command = new CommandObject(this);
 
     connect(m_tcpServer, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 
@@ -44,10 +48,11 @@ Network::Network(QObject* parent)
 
 Network::~Network()
 {
-
      m_parse->protocol_parse_set_callback(NULL);
      m_tcpServer->close();
     delete m_parse;
+
+     m_command = NULL;
 }
 
 void Network::stop_start()
@@ -91,13 +96,7 @@ void Network::startLisnten()
 
 void Network::newMessageCome(char* msg, int len)
 {
-    QString inMsg(QByteArray(msg, len));
-    qDebug() << __FUNCTION__ << " " <<  inMsg;
-
-    if (inMsg.toLower() == "power off")
-    {
-        powerOff();
-    }
+    emit m_command->inCommand(QByteArray(msg, len));
 }
 
 void Network::onNewConnection()
@@ -216,42 +215,4 @@ void Network::heartInfo()
     }
 }
 
-void Network::powerOff()
-{
-    qDebug() <<__FUNCTION__;
-
-#ifdef linux
-    system("poweroff");
-#endif
-
-#ifdef __WIN32
-    system("shutdown -s -t 0");
-    /*
-        HANDLE hToken;
-        TOKEN_PRIVILEGES tkp;
-
-        //获取进程标志
-        if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
-        {
-            return ;
-        }
-        //获取关机特权的LUID
-        LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,    &tkp.Privileges[0].Luid);
-        tkp.PrivilegeCount = 1;
-        tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-        //获取这个进程的关机特权
-        AdjustTokenPrivileges(hToken, false, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
-        if (GetLastError() != ERROR_SUCCESS)
-        {
-                return ;
-        }
-        // 强制关闭计算机
-        if ( !ExitWindowsEx(EWX_SHUTDOWN , 0))  //关机
-        {
-            return ;
-        }
-        */
-#endif
-}
 

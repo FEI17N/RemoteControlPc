@@ -12,6 +12,8 @@ class QAbstractSocket;
 
 class protocol_parse;
 
+class CommandObject;
+
 class Network : public QObject
 {
     Q_OBJECT
@@ -28,7 +30,7 @@ signals:
 
 private:
     static void newMessageCome(char* msg, int len);
-    static void powerOff();
+    //static void powerOff();
 
     QTcpServer* m_tcpServer;
     QUdpSocket* m_udpSocket;

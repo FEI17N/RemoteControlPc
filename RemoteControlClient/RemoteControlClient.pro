@@ -11,11 +11,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = RemoteControlClient
 TEMPLATE = app
 
+INCLUDEPATH += ../public_define
+
 
 SOURCES += main.cpp\
         RemoteControlClientGui.cpp
 
-HEADERS  += RemoteControlClientGui.h
+HEADERS  += RemoteControlClientGui.h \
+    ../public_define/PUBLIC_DATA.h
 
 FORMS    += RemoteControlClientGui.ui
 

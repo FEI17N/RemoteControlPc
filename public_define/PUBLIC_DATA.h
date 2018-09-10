@@ -42,6 +42,17 @@ static void public_to_data(QString& command, QByteArray& data, const QByteArray&
     data = QByteArray(data_in_begin + 2 + size_c, size_d);
 }
 
+#if __cplusplus < 201103L
+  #error "not for C++11"
+#else
+template<typename F, typename C>
+auto smart_bind(F f, C* c)
+{
+    return [c, f](auto&&... args) { return (c->*f)(std::forward<decltype(args)>(args)...); };
+}
+#endif
+
+
 
 
 #endif // PUBLIC_DATA_H

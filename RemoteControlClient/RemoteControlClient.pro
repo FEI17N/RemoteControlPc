@@ -35,3 +35,5 @@ DISTFILES += \
 
 include(../protocol_parse/protocol_parse.pri);
 
+CONFIG += c++14
+QMAKE_CXXFLAGS += -std=c++14 -std=gnu++14

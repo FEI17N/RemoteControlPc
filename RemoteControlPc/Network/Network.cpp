@@ -16,6 +16,7 @@
 #include "protocol_parse.h"
 #include "CommandObject.h"
 
+#include "PUBLIC_DATA.h"
 
 const quint16 listenPort = 7430;
 CommandObject* m_command;
@@ -35,7 +36,15 @@ Network::Network(QObject* parent)
 
     m_parse = new protocol_parse;
 
+#if __cplusplus < 201402L
     m_parse->protocol_parse_set_callback(newMessageCome);
+#else
+    std::function<void(char* msg, int len)>
+           pFunc =
+           smart_bind(newMessageCome, this);
+
+    m_parse->protocol_parse_set_callback(pFunc);
+#endif
 
     connect(&m_brocastTimer, SIGNAL(timeout()), this, SLOT(brocastInfo()));
     connect(&m_heartTimer, SIGNAL(timeout()), this, SLOT(heartInfo()));
@@ -48,8 +57,8 @@ Network::Network(QObject* parent)
 
 Network::~Network()
 {
-     m_parse->protocol_parse_set_callback(NULL);
-     m_tcpServer->close();
+    m_parse->protocol_parse_set_callback(NULL);
+    m_tcpServer->close();
     delete m_parse;
 
      m_command = NULL;

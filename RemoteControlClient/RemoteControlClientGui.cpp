@@ -185,15 +185,11 @@ void RemoteControlClientGui::on_toolButton_clicked()
 {
    if (m_clientSocket->isOpen())
    {
-       QString command("POWER OFF");
-       quint8 size_c = sizeof("POWER OFF");
-       quint8 size_d = 0;
-       command.prepend(size_d);
-       command.prepend(size_c);
-       char* c_command = (char*)command.toStdString().c_str();
-       int out_length = 0;
-       char* msg = m_parse->protocol_parse_to_message(command.toStdString().length(), c_command, &out_length);
-       QByteArray sendMsg(msg, out_length);
-       m_clientSocket->write(sendMsg);
+       QByteArray ssMsg =public_to_msg("POWER OFF", QByteArray());
+       int sout_length = 0;
+       char* mssg = m_parse->protocol_parse_to_message(ssMsg.length(), ssMsg.data(), &sout_length);
+       QByteArray tssMsg(mssg, sout_length);
+
+       m_clientSocket->write(tssMsg);
    }
 }

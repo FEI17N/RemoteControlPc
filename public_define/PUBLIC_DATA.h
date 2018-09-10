@@ -17,29 +17,50 @@ typedef struct
     int z;
 }POS_3D;
 
+typedef struct
+{
+    quint8 a0;
+    quint8 a1;
+}SIZED;
+
 static QByteArray public_to_msg(const QByteArray& command, const QByteArray& data)
 {
-    quint8 size_c = command.toStdString().length();
-    quint8 size_d = data.size();
+    quint8 size_c = command.length();
+    quint16 size_d = data.size();
 
-    QByteArray cmd(command.toStdString().c_str(), size_c);
+    Q_ASSERT(sizeof(size_d) == sizeof(SIZED));
+
+    SIZED sized_d;
+    memcpy(&sized_d, &size_d, sizeof(size_d));
+
+    QByteArray cmd(command.data(), size_c);
     QByteArray res;
     res.append(size_c);
-    res.append(size_d);
+    res.append(sized_d.a0);
+    res.append(sized_d.a1);
     res.append(cmd);
     res.append(data);
 
     return res;
 }
 
-static void public_to_data(QString& command, QByteArray& data, const QByteArray& data_in)
+static void public_to_data(QByteArray& command, QByteArray& data, const QByteArray& data_in)
 {
+    SIZED sized_d;
     const char* data_in_begin = data_in.data();
     quint8 size_c = *(data_in_begin + 0);
-    quint8 size_d = *(data_in_begin + 1);
+    //quint8 size_d = *(data_in_begin + 1);
 
-    command = QByteArray(data_in_begin + 2, size_c);
-    data = QByteArray(data_in_begin + 2 + size_c, size_d);
+    sized_d.a0 = *(data_in_begin + 1);
+    sized_d.a1 = *(data_in_begin + 2);
+
+    quint16 size_d;
+
+    Q_ASSERT(sizeof(size_d) == sizeof(SIZED));
+    memcpy(&size_d, &sized_d, sizeof(size_d));
+
+    command = QByteArray(data_in_begin + 3, size_c);
+    data = QByteArray(data_in_begin + 3 + size_c, size_d);
 }
 
 #if __cplusplus < 201402L

@@ -501,9 +501,13 @@ public:
                 }
 
 
-                if (this_callback != 0)
+                if (this_callback != null_protocol_parse_callback_function_ptr)
                 {
+#if __cplusplus < 201402L
                     (*this_callback)(PROTOCOL_PARSE_RESULT, result_index);
+#else
+                    this_callback(PROTOCOL_PARSE_RESULT, result_index);
+#endif
                     protocol_parse_start_index = 0;
                     memset(PROTOCOL_PARSE_BUFF, 0, sizeof(PROTOCOL_PARSE_BUFF));
                     memset(PROTOCOL_PARSE_RESULT, 0, sizeof(PROTOCOL_PARSE_RESULT));

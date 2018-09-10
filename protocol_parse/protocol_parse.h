@@ -5,7 +5,16 @@
 
 
 //get message and length
-typedef void (*protocol_parse_callback)(char* message, int length);
+#if __cplusplus < 201402L
+    #define null_func_ptr NULL
+    typedef void (*protocol_parse_callback)(char* message, int length);
+#else
+    #include <iostream>
+    #include <functional>
+    #define null_protocol_parse_callback_function_ptr nullptr
+    #define protocol_parse_callback std::function<void(char* msg, int len)>
+#endif
+
 
 class protocol_parse
 {

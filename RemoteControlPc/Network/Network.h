@@ -29,7 +29,10 @@ signals:
     void connected(bool res);
 
 private:
-    static void newMessageCome(char* msg, int len);
+#if __cplusplus < 201402L
+    static
+#endif
+    void newMessageCome(char* msg, int len);
     //static void powerOff();
 
     QTcpServer* m_tcpServer;

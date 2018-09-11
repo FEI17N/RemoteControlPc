@@ -503,7 +503,7 @@ public:
 
                 if (this_callback != null_protocol_parse_callback_function_ptr)
                 {
-#if __cplusplus < 201402L
+#if __cplusplus < 201402L && (defined _MSC_VER && _MSC_VER < 1800)
                     (*this_callback)(PROTOCOL_PARSE_RESULT, result_index);
 #else
                     this_callback(PROTOCOL_PARSE_RESULT, result_index);

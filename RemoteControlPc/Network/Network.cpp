@@ -36,12 +36,12 @@ Network::Network(QObject* parent)
 
     m_parse = new protocol_parse;
 
-#if __cplusplus < 201402L
+#if __cplusplus < 201402L && (defined _MSC_VER && _MSC_VER < 1800)
     m_parse->protocol_parse_set_callback(newMessageCome);
 #else
-    std::function<void(char* msg, int len)>
-           pFunc =
-           smart_bind(newMessageCome, this);
+    std::function<void(char*, int)>
+        pFunc =
+        smart_bind(&Network::newMessageCome, this);
 
     m_parse->protocol_parse_set_callback(pFunc);
 #endif

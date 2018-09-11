@@ -5,8 +5,8 @@
 
 
 //get message and length
-#if __cplusplus < 201402L
-    #define null_func_ptr NULL
+#if __cplusplus < 201402L && (defined _MSC_VER && _MSC_VER < 1800)
+    #define null_protocol_parse_callback_function_ptr NULL
     typedef void (*protocol_parse_callback)(char* message, int length);
 #else
     #include <iostream>

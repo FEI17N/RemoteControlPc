@@ -81,7 +81,7 @@ public:
         }
 
         memset(PROTOCOL_PARSE_HE_TO, 0, longer_length);
-        memset(PROTOCOL_PARSE_HE_TO_BUFF, 0, sizeof(2 * longer_length));
+        memset(PROTOCOL_PARSE_HE_TO_BUFF, 0, 2 * longer_length);
         memset(PROTOCOL_TO_MESSAGE_BUFF, 0, MAX_TO_MESSAGE_BUFF_SIZE + 1);
         memset(PROTOCOL_TO_CONETENT_BUFF, 0, MAX_TO_MESSAGE_BUFF_SIZE + 1);
         return;
